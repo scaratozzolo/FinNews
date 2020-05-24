@@ -1,14 +1,16 @@
 import feedparser
 import time
 import sqlite3
-from feed import Feed
+import os
+from .feed import Feed
+from pathlib import Path
 
 class CNBC(object):
     """Object for maintaining CNBC rss feeds"""
 
     def __init__(self, topics=[], save_feeds=False):
 
-        self.__conn = sqlite3.connect('rss.db')
+        self.__conn = sqlite3.connect(os.path.join(Path(__file__).parent, 'rss.db'))
         self.__c = self.__conn.cursor()
 
         self.__possible_topics = []
