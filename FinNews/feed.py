@@ -2,7 +2,7 @@ import feedparser
 import time
 
 class Feed(object):
-
+    """Object for maintaining various attributes of a single RSS feed"""
     def __init__(self, url: str, feed_source: str, feed_name: str, save_feeds=False):
         """save_feeds: save all entries and all feeds every time feed is parsed"""
         self.__url = url
