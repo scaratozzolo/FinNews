@@ -3,11 +3,11 @@ import time
 
 class Feed(object):
     """Object for maintaining various attributes of a single RSS feed"""
-    def __init__(self, url: str, feed_source: str, feed_name: str, save_feeds=False):
+    def __init__(self, url: str, feed_source: str, feed_topic: str, save_feeds=False):
         """save_feeds: save all entries and all feeds every time feed is parsed"""
         self.__url = url
         self.__feed_source = feed_source
-        self.__feed_name = feed_name
+        self.__feed_topic = feed_topic
 
         self.__save_feeds = save_feeds
         self.__feed = None
@@ -42,9 +42,9 @@ class Feed(object):
         """Returns feed source"""
         return self.__feed_source
 
-    def get_feed_name(self):
-        """Returns feed name"""
-        return self.__feed_name
+    def get_feed_topic(self):
+        """Returns feed topic"""
+        return self.__feed_topic
 
     def get_feed(self):
         """Returns the most recent feed since calling get_news"""
