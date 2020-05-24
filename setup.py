@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="FinNews",
-    version="0.1",
+    version="0.1.1",
     author="Scott Caratozzolo",
     author_email="scaratozzolo12@gmail.com",
     description="Package for gathering financial news from various RSS feeds",
