@@ -12,12 +12,13 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/scaratozzolo/FinNews",
+    package_data = {'FinNews': ['rss.db']},
     packages=setuptools.find_packages(),
     install_requires=["requests"],
-    classifiers=(
+    classifiers=[
         "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Development Status :: 2 - Pre-Alpha"
-    ),
+    ],
 )
