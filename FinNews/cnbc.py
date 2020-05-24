@@ -1,7 +1,7 @@
 import feedparser
 import time
 import sqlite3
-import os
+import pkg_resources
 from .feed import Feed
 from pathlib import Path
 
