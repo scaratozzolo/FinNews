@@ -10,7 +10,7 @@ class CNBC(object):
 
     def __init__(self, topics=[], save_feeds=False):
 
-        self.__conn = sqlite3.connect(os.path.join(Path(__file__).parent, 'rss.db'))
+        self.__conn = sqlite3.connect(pkg_resources.resource_filename("FinNews", "rss.db"))
         self.__c = self.__conn.cursor()
 
         self.__possible_topics = []
