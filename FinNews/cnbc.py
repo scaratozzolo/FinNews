@@ -3,6 +3,7 @@ import time
 import sqlite3
 import pkg_resources
 import pandas as pd
+import json
 from .feed import Feed
 
 class CNBC(object):
@@ -11,7 +12,7 @@ class CNBC(object):
         """
         Object for maintaining CNBC rss feeds.
         topics: a list of rss feed topics, must be one of the possible topics
-        save_feeds: Feed objects can save all previous news entries if this is True, otherwise the object will only the newest entries 
+        save_feeds: Feed objects can save all previous news entries if this is True, otherwise the object will only the newest entries
         """
         self.__source = 'CNBC'
 
@@ -132,3 +133,10 @@ class CNBC(object):
             conn.close()
 
         return None
+
+    def to_json(self, file_path):
+        """Converts entries to a json file"""
+        with open(file_path, 'w') as f:
+            json.dump(self.get_news(), f)
+
+        return True
