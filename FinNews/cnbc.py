@@ -33,9 +33,14 @@ class CNBC(object):
             entries.extend(feed.get_news())
 
         return entries
+
     def get_current_feeds(self):
         """Returns a list of all current Feed objects"""
         return self.__current_feeds
+
+    def get_current_topics(self):
+        """Returns a list of all current Feed objects"""
+        return self.__current_topics
 
     def possible_topics(self):
         """Returns a list of possible topics from this source"""
@@ -70,3 +75,31 @@ class CNBC(object):
                 return self.__current_feeds[0].similar_keys(keys_list)
         else:
             return []
+
+    def add_topics(self, topics=[]):
+        """Given a list of topics, creates and adds new feeds to current feeds with given topic, as long as they are valid and a feed isn't already made
+            Returns new topics added"""
+        new_topics = []
+        for topic in topics:
+            if topic in self.__possible_topics and topic not in self.__current_topics:
+                new_topics.append(topic)
+        new_topics = list(set(new_topics))
+        for topic in new_topics:
+            url = self.__c.execute("SELECT url FROM feeds WHERE source = 'CNBC' AND topic = '{}'".format(topic)).fetchone()[0]
+            self.__current_feeds.append(Feed(url, feed_source="CNBC", feed_topic=topic, save_feeds=self.__save_feeds))
+
+        self.__current_topics.extend(new_topics)
+        return new_topics
+
+    def remove_topics(self, topics=[]):
+        """Given a list of topics, removes them from current topics and deletes their feed from current feeds"""
+        for topic in topics:
+            if topic in self.__current_topics:
+                self.__current_topics.remove(topic)
+
+                for i in range(len(self.__current_feeds)):
+                    if self.__current_feeds[i].get_feed_topic() == topic:
+                        del self.__current_feeds[i]
+                        break
+
+        return self.__current_topics
