@@ -1,9 +1,10 @@
 import feedparser
 import time
+import pandas as pd
 
 class Feed(object):
     """Object for maintaining various attributes of a single RSS feed"""
-    def __init__(self, url: str, feed_source: str, feed_topic: str, save_feeds=False):
+    def __init__(self, url: str, feed_source: str, feed_topic: str, save_feeds=True):
         """save_feeds: save all entries and all feeds every time feed is parsed"""
         self.__url = url
         self.__feed_source = feed_source
@@ -99,3 +100,11 @@ class Feed(object):
                 keys = list(set(i) & set(keys))
 
         return keys
+
+    def to_pandas(self, all_entries=True):
+        if all_entries:
+            df = pd.DataFrame(self.__all_entries)
+            return df
+        else:
+            df = pd.DataFrame(self.__newest_entries)
+            return df
