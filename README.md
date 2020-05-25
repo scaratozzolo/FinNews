@@ -23,4 +23,6 @@ Todo:
 - [ ] Seeking Alpha
 - [ ] investing.com
 - [ ] WSJ
-- [ ] yahoo
+- [ ] Yahoo Finance
+- [ ] Financial Times
+- [ ] Fortune
