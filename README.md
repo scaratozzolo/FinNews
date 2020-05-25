@@ -13,7 +13,11 @@ fn.CNBC(topics=['finance', 'earnings'], save_feeds=True)
 fn.SeekingAlpha(topics=['financial', '$AAPL'], save_feeds=True)
 ```
 
-You can install this package using the repo link and pip:
+You can install using pip from Pypi:
+```
+$ pip install FinNews
+```
+or from this repo:
 ```
 $ pip install git+https://github.com/scaratozzolo/FinNews
 ```
