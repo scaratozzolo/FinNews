@@ -3,18 +3,18 @@ import time
 import sqlite3
 import pkg_resources
 from .feed import Feed
-from pathlib import Path
 
 class CNBC(object):
     """Object for maintaining CNBC rss feeds"""
 
-    def __init__(self, topics=[], save_feeds=False):
+    def __init__(self, topics=[], save_feeds=True):
+        self.__source = 'CNBC'
 
         self.__conn = sqlite3.connect(pkg_resources.resource_filename("FinNews", "rss.db"))
         self.__c = self.__conn.cursor()
 
         self.__possible_topics = []
-        for row in self.__c.execute("SELECT topic FROM feeds WHERE source = 'CNBC'").fetchall():
+        for row in self.__c.execute("SELECT topic FROM feeds WHERE source = '{}'".format(self.__source)).fetchall():
             self.__possible_topics.append(row[0])
 
         self.__current_topics = [x for x in list(set(topics)) if x in self.__possible_topics]
@@ -23,8 +23,8 @@ class CNBC(object):
 
         self.__current_feeds = []
         for topic in self.__current_topics:
-            url = self.__c.execute("SELECT url FROM feeds WHERE source = 'CNBC' AND topic = '{}'".format(topic)).fetchone()[0]
-            self.__current_feeds.append(Feed(url, feed_source="CNBC", feed_topic=topic, save_feeds=self.__save_feeds))
+            url = self.__c.execute("SELECT url FROM feeds WHERE source = '{}' AND topic = '{}'".format(self.__source, topic)).fetchone()[0]
+            self.__current_feeds.append(Feed(url, feed_source=self.__source, feed_topic=topic, save_feeds=self.__save_feeds))
 
     def get_news(self):
         """Returns a list of all entries from feed"""
@@ -85,8 +85,8 @@ class CNBC(object):
                 new_topics.append(topic)
         new_topics = list(set(new_topics))
         for topic in new_topics:
-            url = self.__c.execute("SELECT url FROM feeds WHERE source = 'CNBC' AND topic = '{}'".format(topic)).fetchone()[0]
-            self.__current_feeds.append(Feed(url, feed_source="CNBC", feed_topic=topic, save_feeds=self.__save_feeds))
+            url = self.__c.execute("SELECT url FROM feeds WHERE source = '{}' AND topic = '{}'".format(self.__source, topic)).fetchone()[0]
+            self.__current_feeds.append(Feed(url, feed_source=self.__source, feed_topic=topic, save_feeds=self.__save_feeds))
 
         self.__current_topics.extend(new_topics)
         return new_topics
