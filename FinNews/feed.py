@@ -4,9 +4,15 @@ import pandas as pd
 import sqlite3
 
 class Feed(object):
-    """Object for maintaining various attributes of a single RSS feed"""
+
     def __init__(self, url: str, feed_source: str, feed_topic: str, save_feeds=True):
-        """save_feeds: save all entries and all feeds every time feed is parsed"""
+        """
+        Object for maintaining various attributes of a single RSS feed
+        url: the url to the rss feed
+        feed_source: where the rss feed is coming from (CNBC, Seeking Alpha...)
+        feed_topic: what the topic of this feed is
+        save_feeds: Feed objects can save all previous news entries if this is True, otherwise the object will only the newest entries
+        """
         self.__url = url
         self.__feed_source = feed_source
         self.__feed_topic = feed_topic
@@ -127,7 +133,7 @@ class Feed(object):
                 df = df.drop([col], axis=1)
             except:
                 pass
-            
+
         df.to_sql(name=table_name, con=conn, if_exists=if_exists, index=False)
 
         if remove_duplicates:

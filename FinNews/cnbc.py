@@ -6,9 +6,13 @@ import pandas as pd
 from .feed import Feed
 
 class CNBC(object):
-    """Object for maintaining CNBC rss feeds"""
 
     def __init__(self, topics=[], save_feeds=True):
+        """
+        Object for maintaining CNBC rss feeds.
+        topics: a list of rss feed topics, must be one of the possible topics
+        save_feeds: Feed objects can save all previous news entries if this is True, otherwise the object will only the newest entries 
+        """
         self.__source = 'CNBC'
 
         self.__conn = sqlite3.connect(pkg_resources.resource_filename("FinNews", "rss.db"))
