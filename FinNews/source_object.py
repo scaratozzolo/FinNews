@@ -113,6 +113,12 @@ class _Source(object):
 
         return self.__current_topics
 
+    def add_feed(self, url, source_name, topic_name):
+        """Allows you to add a feed from a url not provided or from a different source"""
+        self.__current_feeds.append(Feed(url, feed_source=source_name, feed_topic=topic_name, save_feeds=self.__save_feeds))
+
+        self.__current_topics.append(topic_name)
+
     def to_pandas(self):
         """Returns a pandas dataframe of the most recent news entries"""
         df = pd.DataFrame(self.get_news())

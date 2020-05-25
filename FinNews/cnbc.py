@@ -13,6 +13,7 @@ class CNBC(_Source):
         """
         Object for maintaining CNBC rss feeds.
         topics: a list of rss feed topics, must be one of the possible topics
+            You can leave the list blank and call CNBC.get_possible_topics() and then add topics using CNBC.add_topics()
         save_feeds: Feed objects can save all previous news entries if this is True, otherwise the object will only the newest entries
         """
         super().__init__('CNBC', save_feeds)
