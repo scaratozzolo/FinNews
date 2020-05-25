@@ -1,11 +1,12 @@
 import setuptools
+import FinNews
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="FinNews",
-    version="0.1.1",
+    version=FinNews.__version__,
     author="Scott Caratozzolo",
     author_email="scaratozzolo12@gmail.com",
     description="Package for gathering financial news from various RSS feeds",
@@ -14,7 +15,7 @@ setuptools.setup(
     url="https://github.com/scaratozzolo/FinNews",
     package_data = {'FinNews': ['rss.db']},
     packages=setuptools.find_packages(),
-    install_requires=["requests"],
+    install_requires=["feedparser", "sqlite3"],
     classifiers=[
         "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: MIT License",
