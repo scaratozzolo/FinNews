@@ -1,6 +1,7 @@
 import feedparser
 import time
 import pandas as pd
+import sqlite3
 
 class Feed(object):
     """Object for maintaining various attributes of a single RSS feed"""
@@ -102,9 +103,38 @@ class Feed(object):
         return keys
 
     def to_pandas(self, all_entries=True):
+        """Returns a pandas dataframe of the most recent news entries or all saved entries"""
         if all_entries:
             df = pd.DataFrame(self.__all_entries)
-            return df
         else:
             df = pd.DataFrame(self.__newest_entries)
-            return df
+
+        # if remove_duplicates:
+        #     df.drop_duplicates(inplace=True)
+
+        return df
+
+    def to_sqlite3(self, db_path, table_name, all_entries=True, if_exists="append", remove_duplicates=True):
+        """Converts entries into an sqlite3 table using pandas.DataFrame.to_sql function"""
+
+        conn = sqlite3.connect(db_path)
+
+        df = self.to_pandas(all_entries)
+
+        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content']
+        for col in possible_columns:
+            try:
+                df = df.drop([col], axis=1)
+            except:
+                pass
+            
+        df.to_sql(name=table_name, con=conn, if_exists=if_exists, index=False)
+
+        if remove_duplicates:
+            c = conn.cursor()
+            c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY link)".format(table_name, table_name))
+            c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY title)".format(table_name, table_name))
+            conn.commit()
+            conn.close()
+
+        return None

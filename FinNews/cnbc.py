@@ -108,4 +108,23 @@ class CNBC(object):
     def to_pandas(self):
         """Returns a pandas dataframe of the most recent news entries"""
         df = pd.DataFrame(self.get_news())
+        # if remove_duplicates:
+        #     df.drop_duplicates(inplace=True)
         return df
+
+    def to_sqlite3(self, db_path, table_name, if_exists="append", remove_duplicates=True):
+        """Converts the most recent entries into an sqlite3 table using pandas.DataFrame.to_sql function"""
+
+        conn = sqlite3.connect(db_path)
+        df = self.to_pandas()
+        df = df.drop(['links','title_detail','summary_detail', 'published_parsed'], axis=1)
+        df.to_sql(name=table_name, con=conn, if_exists=if_exists, index=False)
+
+        if remove_duplicates:
+            c = conn.cursor()
+            c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY link)".format(table_name, table_name))
+            c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY title)".format(table_name, table_name))
+            conn.commit()
+            conn.close()
+
+        return None
