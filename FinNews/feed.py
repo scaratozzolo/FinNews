@@ -2,6 +2,7 @@ import feedparser
 import time
 import pandas as pd
 import sqlite3
+import json
 
 class Feed(object):
 
@@ -96,7 +97,7 @@ class Feed(object):
         keys = []
         if keys_list == []:
             return keys
-
+        # TODO isinstance of cnbc, seekingalpha...
         if isinstance(keys_list[0], Feed):
             keys = keys_list[0].entry_keys()
             for i in keys_list[1:]:
@@ -110,6 +111,7 @@ class Feed(object):
 
     def to_pandas(self, all_entries=True):
         """Returns a pandas dataframe of the most recent news entries or all saved entries"""
+        # TODO update before converting?
         if all_entries:
             df = pd.DataFrame(self.__all_entries)
         else:
@@ -144,3 +146,14 @@ class Feed(object):
             conn.close()
 
         return None
+
+    def to_json(self, file_path, all_entries=True):
+        """Converts entries to a json file"""
+        # TODO update before converting?
+        with open(file_path, 'w') as f:
+            if all_entries:
+                json.dump(self.__all_entries, f)
+            else:
+                json.dump(self.__newest_entries, f)
+
+        return True

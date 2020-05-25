@@ -5,7 +5,12 @@ This is a package to help me with a personal project dealing with sentiment anal
 This package is meant to get news from various RSS sources. Current RSS sources:
 - CNBC
 ```python
-fn.CNBC(topics=[], save_feeds=True)
+fn.CNBC(topics=['finance', 'earnings'], save_feeds=True)
+```
+- Seeking Alpha
+```python
+# SeekingAlpha has support for RSS feeds by ticker, tickers can be passed as a topic and are denoted by $XXX
+fn.SeekingAlpha(topics=['financial', '$AAPL'], save_feeds=True)
 ```
 
 You can install this package using the repo link and pip:
@@ -24,7 +29,7 @@ print(cnbc_feed.possible_topics())
 
 Todo:
 - [x] CNBC
-- [ ] Seeking Alpha
+- [x] Seeking Alpha
 - [ ] investing.com
 - [ ] WSJ
 - [ ] Yahoo Finance

@@ -6,7 +6,7 @@ import pandas as pd
 import json
 from .feed import Feed
 
-class CNBC(object):
+class SeekingAlpha(object):
 
     def __init__(self, topics=[], save_feeds=True):
         """
@@ -14,22 +14,34 @@ class CNBC(object):
         topics: a list of rss feed topics, must be one of the possible topics
         save_feeds: Feed objects can save all previous news entries if this is True, otherwise the object will only the newest entries
         """
-        self.__source = 'CNBC'
+        self.__source = 'Seeking Alpha'
+        self.__save_feeds = save_feeds
+        self.__possible_topics = []
+        self.__current_topics = []
+        self.__current_feeds = []
 
         self.__conn = sqlite3.connect(pkg_resources.resource_filename("FinNews", "rss.db"))
         self.__c = self.__conn.cursor()
 
-        self.__possible_topics = []
+
         for row in self.__c.execute("SELECT topic FROM feeds WHERE source = '{}'".format(self.__source)).fetchall():
             self.__possible_topics.append(row[0])
 
-        self.__current_topics = [x for x in list(set(topics)) if x in self.__possible_topics]
-        self.__save_feeds = save_feeds
+        for x in list(set(topics)):
+            if x[0] != '$':
+                if x in self.__possible_topics:
+                    self.__current_topics.append(x)
+            else:
+                self.__current_topics.append(x)
 
 
-        self.__current_feeds = []
+        self.__ticker_url = self.__c.execute("SELECT url FROM feeds WHERE source = '{}' AND topic = '{}'".format(self.__source, "ticker")).fetchone()[0]
         for topic in self.__current_topics:
-            url = self.__c.execute("SELECT url FROM feeds WHERE source = '{}' AND topic = '{}'".format(self.__source, topic)).fetchone()[0]
+            if topic[0] != '$':
+                url = self.__c.execute("SELECT url FROM feeds WHERE source = '{}' AND topic = '{}'".format(self.__source, topic)).fetchone()[0]
+            else:
+                url = self.__ticker_url.format(topic[1:])
+
             self.__current_feeds.append(Feed(url, feed_source=self.__source, feed_topic=topic, save_feeds=self.__save_feeds))
 
     def get_news(self):
@@ -87,11 +99,20 @@ class CNBC(object):
             Returns new topics added"""
         new_topics = []
         for topic in topics:
-            if topic in self.__possible_topics and topic not in self.__current_topics:
-                new_topics.append(topic)
+            if topic[0] != '$':
+                if topic in self.__possible_topics and topic not in self.__current_topics:
+                    new_topics.append(topic)
+            else:
+                if topic not in self.__current_topics:
+                    new_topics.append(topic)
+
         new_topics = list(set(new_topics))
         for topic in new_topics:
-            url = self.__c.execute("SELECT url FROM feeds WHERE source = '{}' AND topic = '{}'".format(self.__source, topic)).fetchone()[0]
+            if topic[0] != '$':
+                url = self.__c.execute("SELECT url FROM feeds WHERE source = '{}' AND topic = '{}'".format(self.__source, topic)).fetchone()[0]
+            else:
+                url = self.__ticker_url.format(topic[1:])
+
             self.__current_feeds.append(Feed(url, feed_source=self.__source, feed_topic=topic, save_feeds=self.__save_feeds))
 
         self.__current_topics.extend(new_topics)
