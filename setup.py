@@ -15,7 +15,7 @@ setuptools.setup(
     url="https://github.com/scaratozzolo/FinNews",
     package_data = {'FinNews': ['rss.db']},
     packages=setuptools.find_packages(),
-    install_requires=["feedparser", "sqlite3"],
+    install_requires=["feedparser", "sqlite3", "pandas"],
     classifiers=[
         "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: MIT License",
