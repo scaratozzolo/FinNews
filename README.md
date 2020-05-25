@@ -19,16 +19,8 @@ print(cnbc_feed.possible_topics())
 ```
 
 Todo:
-<<<<<<< HEAD
 - [x] CNBC
 - [ ] Seeking Alpha
 - [ ] investing.com
 - [ ] WSJ
-= [ ] yahoo
-=======
-[x] CNBC
-[ ] Seeking Alpha
-[ ] investing.com
-[ ] WSJ
-[ ] yahoo
->>>>>>> 6abcba203bec5eb5262a72e8018cb9c72709e58f
+- [ ] yahoo
