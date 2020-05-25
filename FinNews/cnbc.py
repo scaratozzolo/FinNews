@@ -37,7 +37,7 @@ class CNBC(object):
         """Returns a list of all current Feed objects"""
         return self.__current_feeds
 
-    def possible_topcs(self):
+    def possible_topics(self):
         """Returns a list of possible topics from this source"""
         return self.__possible_topics
 
