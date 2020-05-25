@@ -2,6 +2,7 @@ import feedparser
 import time
 import sqlite3
 import pkg_resources
+import pandas as pd
 from .feed import Feed
 
 class CNBC(object):
@@ -103,3 +104,8 @@ class CNBC(object):
                         break
 
         return self.__current_topics
+
+    def to_pandas(self):
+        """Returns a pandas dataframe of the most recent news entries"""
+        df = pd.DataFrame(self.get_news())
+        return df
