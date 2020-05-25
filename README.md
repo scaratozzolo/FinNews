@@ -1,6 +1,6 @@
 # FinNews
 
-This is a package to help me with a personal project. The package has a lot of influence from the [newscatcher package](https://github.com/kotartemiy/newscatcher). While that package is great for getting general news, I need more financial related news that I wasn't getting.
+This is a package to help me with a personal project dealing with sentiment analysis and headline classification. The package has a lot of influence from the [newscatcher package](https://github.com/kotartemiy/newscatcher). While that package is great for getting general news, I need more financial related news that I wasn't getting.
 
 This package is meant to get news articles from various rss feed sources. The first one implemented is CNBC. By calling the CNBC class, you'll have access to all of their rss feeds. All you need to do is specify the topics.
 
