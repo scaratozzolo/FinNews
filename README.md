@@ -35,12 +35,16 @@ fn.SeekingAlpha(topics=['financial', '$AAPL'], save_feeds=True)
 ```python
 fn.Investing(topics=['all news', 'latest news'], save_feeds=True)
 ```
+- WSJ
+```python
+fn.WSJ(topics=['markets news', 'us business'], save_feeds=True)
+```
 
 Todo:
 - [x] CNBC
 - [x] Seeking Alpha
-- [x] investing.com
-- [ ] WSJ
+- [x] Investing.com
+- [x] WSJ
 - [ ] Yahoo Finance
 - [ ] Financial Times
 - [ ] Fortune
