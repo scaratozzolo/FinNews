@@ -25,6 +25,11 @@ class _Source(object):
         for row in self.__c.execute("SELECT topic FROM feeds WHERE source = '{}'".format(self.__source)).fetchall():
             self.__possible_topics.append(row[0])
 
+        try:
+            self.__ticker_url = self.__c.execute("SELECT url FROM feeds WHERE source = '{}' and topic='ticker'".format(self.__source)).fetchone()[0]
+        except:
+            self.__ticker_url = ''
+
     def get_news(self):
         """Returns a list of all entries from feed"""
         entries = []

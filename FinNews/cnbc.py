@@ -17,4 +17,4 @@ class CNBC(_Source):
         save_feeds: Feed objects can save all previous news entries if this is True, otherwise the object will only the newest entries
         """
         super().__init__('CNBC', save_feeds)
-        self.add_topics([x for x in list(set(topics)) if x in self.get_possible_topics()])
+        self.add_topics(list(set(topics)))
