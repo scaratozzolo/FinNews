@@ -44,6 +44,16 @@ fn.WSJ(topics=['markets news', 'us business'], save_feeds=True)
 # Yahoo Finance has support for RSS feeds by ticker, tickers can be passed as a topic and are denoted by $XXX
 fn.Yahoo(topics=['top stories', '$DIS'], save_feeds=True)
 ```
+- Financial Times
+```python
+# not a lot of feeds
+fn.FT(topics=['*'], save_feeds=True)
+```
+- Fortune
+```python
+# not a lot of feeds
+fn.Fortune(topics=['*'], save_feeds=True)
+```
 
 Todo:
 - [x] CNBC
@@ -51,5 +61,5 @@ Todo:
 - [x] Investing.com
 - [x] WSJ
 - [x] Yahoo Finance
-- [ ] Financial Times
-- [ ] Fortune
+- [x] Financial Times
+- [x] Fortune
