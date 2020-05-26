@@ -137,7 +137,11 @@ class _Source(object):
 
     def to_pandas(self, remove_duplicates=True):
         """Returns a pandas dataframe of the most recent news entries"""
-        df = pd.DataFrame(self.get_news())
+        news = self.get_news()
+        if news == []:
+            return pd.DataFrame()
+
+        df = pd.DataFrame(news)
         if remove_duplicates:
             df.drop_duplicates(subset=["link"], inplace=True)
 
@@ -150,7 +154,7 @@ class _Source(object):
         conn = sqlite3.connect(db_path)
         df = self.to_pandas(remove_duplicates)
 
-        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content']
+        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'credit']
         for col in possible_columns:
             try:
                 df = df.drop([col], axis=1)
@@ -163,8 +167,9 @@ class _Source(object):
             c = conn.cursor()
             c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY link)".format(table_name, table_name))
             c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY title)".format(table_name, table_name))
-            conn.commit()
-            conn.close()
+
+        conn.commit()
+        conn.close()
 
         return True
 

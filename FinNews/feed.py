@@ -40,6 +40,9 @@ class Feed(object):
         if self.__save_feeds:
             self.__all_entries.extend(self.__feed['entries'])
             self.__all_feeds.append(self.__feed)
+        else:
+            self.__all_entries = self.__newest_entries
+            self.__all_feeds = self.__feed
 
         return self.__newest_entries
 
@@ -119,6 +122,9 @@ class Feed(object):
     def to_pandas(self, all_entries=True, remove_duplicates=True):
         """Returns a pandas dataframe of the most recent news entries or all saved entries"""
         # TODO update before converting?
+        if self.__all_entries == []:
+            return pd.DataFrame()
+
         if all_entries:
             df = pd.DataFrame(self.__all_entries)
         else:
@@ -128,6 +134,7 @@ class Feed(object):
             df.drop_duplicates(subset=['link'], inplace=True)
 
         df['timestamp'] = df['published_parsed'].apply(self.time_to_timestamp)
+        df['topic'] = self.__feed_topic
 
         return df
 
@@ -138,7 +145,7 @@ class Feed(object):
 
         df = self.to_pandas(all_entries, remove_duplicates)
 
-        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content']
+        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'credit']
         for col in possible_columns:
             try:
                 df = df.drop([col], axis=1)
@@ -147,12 +154,14 @@ class Feed(object):
 
         df.to_sql(name=table_name, con=conn, if_exists=if_exists, index=False)
 
-        # if remove_duplicates:
-        #     c = conn.cursor()
-        #     c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY link)".format(table_name, table_name))
-        #     c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY title)".format(table_name, table_name))
-        #     conn.commit()
-        #     conn.close()
+        if remove_duplicates:
+            c = conn.cursor()
+            c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY link)".format(table_name, table_name))
+            c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY title)".format(table_name, table_name))
+
+        conn.commit()
+        conn.close()
+
 
         return True
 
