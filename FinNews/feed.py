@@ -110,6 +110,7 @@ class Feed(object):
         return keys
 
     def time_to_timestamp(self, x):
+        """takes in a time.struct and returns a timestamp"""
         try:
             return int(time.mktime(x))
         except:

@@ -129,6 +129,7 @@ class _Source(object):
         self.__current_topics.append(topic_name)
 
     def time_to_timestamp(self, x):
+        """takes in a time.struct and returns a timestamp"""
         try:
             return int(time.mktime(x))
         except:
