@@ -143,9 +143,9 @@ class _Source(object):
 
         return True
 
-    def to_json(self, file_path):
-        """Converts entries to a json file"""
-        with open(file_path, 'w') as f:
-            json.dump(self.get_news(), f)
+    def to_json(self, file_path, remove_duplicates=True, orient='index'):
+        """Converts entries to a json file using pandas to_json function"""
+        df = self.to_pandas(remove_duplicates)
+        df.to_json(file_path, orient=orient)
 
         return True

@@ -147,13 +147,10 @@ class Feed(object):
 
         return True
 
-    def to_json(self, file_path, all_entries=True):
-        """Converts entries to a json file"""
+    def to_json(self, file_path, all_entries=True, remove_duplicates=True, orient='index'):
+        """Converts entries to a json file using pandas to_json function"""
         # TODO update before converting?
-        with open(file_path, 'w') as f:
-            if all_entries:
-                json.dump(self.__all_entries, f)
-            else:
-                json.dump(self.__newest_entries, f)
+        df = self.to_pandas(all_entries, remove_duplicates)
+        df.to_json(file_path, orient=orient)
 
         return True
