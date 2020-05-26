@@ -109,6 +109,12 @@ class Feed(object):
 
         return keys
 
+    def time_to_timestamp(self, x):
+        try:
+            return int(time.mktime(x))
+        except:
+            return None
+
     def to_pandas(self, all_entries=True, remove_duplicates=True):
         """Returns a pandas dataframe of the most recent news entries or all saved entries"""
         # TODO update before converting?
@@ -119,6 +125,8 @@ class Feed(object):
 
         if remove_duplicates:
             df.drop_duplicates(subset=['link'], inplace=True)
+
+        df['timestamp'] = df['published_parsed'].apply(self.time_to_timestamp)
 
         return df
 

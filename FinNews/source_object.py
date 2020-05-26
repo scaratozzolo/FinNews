@@ -86,6 +86,10 @@ class _Source(object):
         new_topics = []
         for topic in topics:
             # TODO check if source allows for ticker feeds
+            if topic == '*':
+                new_topics = self.__possible_topics
+                break
+
             if topic[0] != '$':
                 if topic in self.__possible_topics and topic not in self.__current_topics:
                     new_topics.append(topic)
@@ -124,11 +128,19 @@ class _Source(object):
 
         self.__current_topics.append(topic_name)
 
+    def time_to_timestamp(self, x):
+        try:
+            return int(time.mktime(x))
+        except:
+            return None
+
     def to_pandas(self, remove_duplicates=True):
         """Returns a pandas dataframe of the most recent news entries"""
         df = pd.DataFrame(self.get_news())
         if remove_duplicates:
             df.drop_duplicates(subset=["link"], inplace=True)
+
+        df['timestamp'] = df['published_parsed'].apply(self.time_to_timestamp)
         return df
 
     def to_sqlite3(self, db_path, table_name, if_exists="append", remove_duplicates=True):
@@ -136,15 +148,22 @@ class _Source(object):
 
         conn = sqlite3.connect(db_path)
         df = self.to_pandas(remove_duplicates)
-        df = df.drop(['links','title_detail','summary_detail', 'published_parsed'], axis=1)
+
+        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content']
+        for col in possible_columns:
+            try:
+                df = df.drop([col], axis=1)
+            except:
+                pass
+
         df.to_sql(name=table_name, con=conn, if_exists=if_exists, index=False)
 
-        # if remove_duplicates:
-        #     c = conn.cursor()
-        #     c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY link)".format(table_name, table_name))
-        #     c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY title)".format(table_name, table_name))
-        #     conn.commit()
-        #     conn.close()
+        if remove_duplicates:
+            c = conn.cursor()
+            c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY link)".format(table_name, table_name))
+            c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY title)".format(table_name, table_name))
+            conn.commit()
+            conn.close()
 
         return True
 
