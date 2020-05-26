@@ -12,6 +12,10 @@ fn.CNBC(topics=['finance', 'earnings'], save_feeds=True)
 # SeekingAlpha has support for RSS feeds by ticker, tickers can be passed as a topic and are denoted by $XXX
 fn.SeekingAlpha(topics=['financial', '$AAPL'], save_feeds=True)
 ```
+- Investing.com
+```python
+fn.Investing(topics=['all news', 'latest news'], save_feeds=True)
+```
 
 You can install using pip by downloading directly from Pypi:
 ```
@@ -34,7 +38,7 @@ print(cnbc_feed.possible_topics())
 Todo:
 - [x] CNBC
 - [x] Seeking Alpha
-- [ ] investing.com
+- [x] investing.com
 - [ ] WSJ
 - [ ] Yahoo Finance
 - [ ] Financial Times
