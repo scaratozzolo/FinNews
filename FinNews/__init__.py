@@ -7,6 +7,6 @@ from FinNews.yahoo import Yahoo
 
 name = "FinNews"
 
-__version__ = "0.8.0"
+__version__ = "0.8.1"
 
 __all__ = ['Feed', 'CNBC', 'SeekingAlpha', 'Investing', 'WSJ', 'Yahoo']
