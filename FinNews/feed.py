@@ -109,7 +109,7 @@ class Feed(object):
 
         return keys
 
-    def to_pandas(self, all_entries=True):
+    def to_pandas(self, all_entries=True, remove_duplicates=True):
         """Returns a pandas dataframe of the most recent news entries or all saved entries"""
         # TODO update before converting?
         if all_entries:
@@ -117,8 +117,8 @@ class Feed(object):
         else:
             df = pd.DataFrame(self.__newest_entries)
 
-        # if remove_duplicates:
-        #     df.drop_duplicates(inplace=True)
+        if remove_duplicates:
+            df.drop_duplicates(subset=['link'], inplace=True)
 
         return df
 
@@ -127,7 +127,7 @@ class Feed(object):
 
         conn = sqlite3.connect(db_path)
 
-        df = self.to_pandas(all_entries)
+        df = self.to_pandas(all_entries, remove_duplicates)
 
         possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content']
         for col in possible_columns:
@@ -138,14 +138,14 @@ class Feed(object):
 
         df.to_sql(name=table_name, con=conn, if_exists=if_exists, index=False)
 
-        if remove_duplicates:
-            c = conn.cursor()
-            c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY link)".format(table_name, table_name))
-            c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY title)".format(table_name, table_name))
-            conn.commit()
-            conn.close()
+        # if remove_duplicates:
+        #     c = conn.cursor()
+        #     c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY link)".format(table_name, table_name))
+        #     c.execute("DELETE FROM {} WHERE ROWID not in (SELECT rowid FROM {} GROUP BY title)".format(table_name, table_name))
+        #     conn.commit()
+        #     conn.close()
 
-        return None
+        return True
 
     def to_json(self, file_path, all_entries=True):
         """Converts entries to a json file"""
