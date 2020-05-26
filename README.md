@@ -16,12 +16,12 @@ Example usage:
 ```python
 import FinNews as fn
 
-cnbc_feed = fn.CNBC(topics=['finance', 'earnings', 'business'])
+cnbc_feed = fn.CNBC(topics=['*']) # '*' = all possible topics
 print(cnbc_feed.get_news())
 print(cnbc_feed.possible_topics())
 ```
-Current RSS feeds and their classes:
 
+Current RSS feeds and their classes:
 - CNBC
 ```python
 fn.CNBC(topics=['finance', 'earnings'], save_feeds=True)
