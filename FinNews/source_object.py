@@ -84,6 +84,19 @@ class _Source(object):
         else:
             return []
 
+    def disimilar_keys(self, keys_list=[]):
+        """Given a list of Feed objects or a list of lists of entry keys, returns a list of keys that the rss entries dont have in common"""
+        if self.__current_feeds != []:
+            if keys_list == []:
+                if len(self.__current_feeds) > 1:
+                    return self.__current_feeds[0].disimilar_keys(self.__current_feeds[1:])
+                else:
+                    return []
+            else:
+                return self.__current_feeds[0].disimilar_keys(keys_list)
+        else:
+            return []
+
     def add_topics(self, topics=[]):
         """Given a list of topics, creates and adds new feeds to current feeds with given topic, as long as they are valid and a feed isn't already made
             Returns new topics added"""

@@ -112,6 +112,23 @@ class Feed(object):
 
         return keys
 
+    def disimilar_keys(self, keys_list=[]):
+        """Given a list of Feed objects or a list of lists of entry keys, returns a list of keys that the rss entries dont have in common"""
+        keys = []
+        if keys_list == []:
+            return keys
+
+        sim_keys = self.similar_keys(keys_list)
+
+        if isinstance(keys_list[0], Feed):
+            for i in keys_list:
+                keys.extend(list(set(i.entry_keys()) - set(sim_keys)))
+        else:
+            for i in keys_list:
+                keys.extend(list(set(i) - set(sim_keys)))
+
+        return list(set(keys))
+
     def time_to_timestamp(self, x):
         """takes in a time.struct and returns a timestamp"""
         try:
@@ -154,6 +171,7 @@ class Feed(object):
             try:
                 df = df.drop([col], axis=1)
             except:
+                print(col + " fail")
                 pass
 
         df.to_sql(name=table_name, con=conn, if_exists=if_exists, index=False)
