@@ -20,16 +20,19 @@ class _Source(object):
         self.__current_feeds = []
         self.__current_topics = []
 
-        self.__conn = sqlite3.connect(pkg_resources.resource_filename("FinNews", "rss.db"))
-        self.__c = self.__conn.cursor()
+        conn = sqlite3.connect(pkg_resources.resource_filename("FinNews", "rss.db"))
+        c = conn.cursor()
 
-        for row in self.__c.execute("SELECT topic FROM feeds WHERE source = '{}'".format(self.__source)).fetchall():
+        for row in c.execute("SELECT topic FROM feeds WHERE source = '{}'".format(self.__source)).fetchall():
             self.__possible_topics.append(row[0])
 
         try:
-            self.__ticker_url = self.__c.execute("SELECT url FROM feeds WHERE source = '{}' and topic='ticker'".format(self.__source)).fetchone()[0]
+            self.__ticker_url = c.execute("SELECT url FROM feeds WHERE source = '{}' and topic='ticker'".format(self.__source)).fetchone()[0]
         except:
             self.__ticker_url = ''
+
+        conn.commit()
+        conn.close()
 
     def get_news(self):
         """Returns a list of all entries from feed"""
@@ -151,11 +154,11 @@ class _Source(object):
 
     def to_sqlite3(self, db_path, table_name, if_exists="append", remove_duplicates=True):
         """Converts the most recent entries into an sqlite3 table using pandas.DataFrame.to_sql function"""
-
         conn = sqlite3.connect(db_path)
         df = self.to_pandas(remove_duplicates)
 
         # turn possible columns into an outer join funtion to get the list
+        # outer join from feeds
         possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'credit', 'feedburner_origlink']
         for col in possible_columns:
             try:
