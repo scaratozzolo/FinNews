@@ -37,12 +37,16 @@ class Feed(object):
         except:
             self.__updated = None
 
+        for i in self.__newest_entries:
+            i['topic'] = self.get_feed_topic()
+
         if self.__save_feeds:
             self.__all_entries.extend(self.__feed['entries'])
             self.__all_feeds.append(self.__feed)
         else:
             self.__all_entries = self.__newest_entries
             self.__all_feeds = self.__feed
+
 
         return self.__newest_entries
 
@@ -153,7 +157,11 @@ class Feed(object):
         if remove_duplicates:
             df.drop_duplicates(subset=['link'], inplace=True)
 
-        df['timestamp'] = df['published_parsed'].apply(self.time_to_timestamp)
+        if self.get_feed_source() != 'Reddit':
+            df['timestamp'] = df['published_parsed'].apply(self.time_to_timestamp)
+        else:
+            df['timestamp'] = df['updated_parsed'].apply(self.time_to_timestamp)
+            
         df['topic'] = self.__feed_topic
 
         return df
@@ -166,7 +174,7 @@ class Feed(object):
         df = self.to_pandas(all_entries, remove_duplicates, update_before)
 
         # turn possible columns into an outer join funtion to get the list
-        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'credit', 'feedburner_origlink']
+        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'nasdaq_partnerlink']
         for col in possible_columns:
             try:
                 df = df.drop([col], axis=1)

@@ -38,6 +38,9 @@ class Source(object):
         conn.commit()
         conn.close()
 
+        # TODO
+        self.__sqlite_columns_to_drop = []
+
     def get_news(self):
         """Returns a list of all entries from feed"""
         entries = []
@@ -180,7 +183,11 @@ class Source(object):
         if remove_duplicates:
             df.drop_duplicates(subset=["link"], inplace=True)
 
-        df['timestamp'] = df['published_parsed'].apply(self.time_to_timestamp)
+        if self.__source != 'Reddit':
+            df['timestamp'] = df['published_parsed'].apply(self.time_to_timestamp)
+        else:
+            df['timestamp'] = df['updated_parsed'].apply(self.time_to_timestamp)
+
         return df
 
     def to_sqlite3(self, db_path, table_name, if_exists="append", remove_duplicates=True):
@@ -190,7 +197,7 @@ class Source(object):
 
         # turn possible columns into an outer join funtion to get the list
         # outer join from feeds
-        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'credit', 'feedburner_origlink']
+        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'updated_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'nasdaq_partnerlink']
         for col in possible_columns:
             try:
                 df = df.drop([col], axis=1)
