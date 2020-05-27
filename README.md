@@ -56,4 +56,9 @@ FinNews.Reuters() # Reuters
 # (* denotes ticker feed support)
 ```
 
-For all class methods run help(FinNews.CNBC()), help(FinNews.SeekingAlpha()), etc.
+For all class methods run:
+```python
+help(FinNews.CNBC())
+help(FinNews.SeekingAlpha())
+# etc.
+```
