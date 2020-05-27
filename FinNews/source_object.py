@@ -87,6 +87,9 @@ class _Source(object):
     def add_topics(self, topics=[]):
         """Given a list of topics, creates and adds new feeds to current feeds with given topic, as long as they are valid and a feed isn't already made
             Returns new topics added"""
+        conn = sqlite3.connect(pkg_resources.resource_filename("FinNews", "rss.db"))
+        c = conn.cursor()
+
         new_topics = []
         for topic in topics:
             # TODO check if source allows for ticker feeds
@@ -104,13 +107,16 @@ class _Source(object):
         new_topics = list(set(new_topics))
         for topic in new_topics:
             if topic[0] != '$':
-                url = self.__c.execute("SELECT url FROM feeds WHERE source = '{}' AND topic = '{}'".format(self.__source, topic)).fetchone()[0]
+                url = c.execute("SELECT url FROM feeds WHERE source = '{}' AND topic = '{}'".format(self.__source, topic)).fetchone()[0]
             else:
                 url = self.__ticker_url.format(topic[1:])
 
             self.__current_feeds.append(Feed(url, feed_source=self.__source, feed_topic=topic, save_feeds=self.__save_feeds))
 
         self.__current_topics.extend(new_topics)
+
+        conn.commit()
+        conn.close()
         return new_topics
 
     def remove_topics(self, topics=[]):
