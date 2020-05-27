@@ -6,7 +6,7 @@ import pandas as pd
 import json
 from .feed import Feed
 
-class _Source(object):
+class Source(object):
 
     def __init__(self, source, save_feeds=True):
         """
@@ -15,6 +15,7 @@ class _Source(object):
         """
         self.__source = source
         self.__possible_topics = []
+        self.__possible_sources = []
         self.__save_feeds = save_feeds
         # Get saved feeds
         self.__current_feeds = []
@@ -25,6 +26,9 @@ class _Source(object):
 
         for row in c.execute("SELECT topic FROM feeds WHERE source = '{}'".format(self.__source)).fetchall():
             self.__possible_topics.append(row[0])
+
+        for row in c.execute("SELECT DISTINCT source FROM feeds").fetchall():
+            self.__possible_sources.append(row[0])
 
         try:
             self.__ticker_url = c.execute("SELECT url FROM feeds WHERE source = '{}' and topic='ticker'".format(self.__source)).fetchone()[0]
@@ -53,6 +57,10 @@ class _Source(object):
     def get_possible_topics(self):
         """Returns a list of possible topics from this source"""
         return self.__possible_topics
+
+    def get_possible_sources(self):
+        """Returns a list of possible sources from this source"""
+        return self.__possible_sources
 
     def entry_keys(self):
         """Returns a list of lists containing the possible keys in each feed, only run after get_news is called"""

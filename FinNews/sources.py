@@ -1,6 +1,6 @@
-from .source_object import _Source
+from .source_object import Source
 
-class CNBC(_Source):
+class CNBC(Source):
 
     def __init__(self, topics=[], save_feeds=True):
         """
@@ -13,7 +13,7 @@ class CNBC(_Source):
         self.add_topics(list(set(topics)))
 
 
-class SeekingAlpha(_Source):
+class SeekingAlpha(Source):
 
     def __init__(self, topics=[], save_feeds=True):
         """
@@ -26,7 +26,7 @@ class SeekingAlpha(_Source):
         self.add_topics(list(set(topics)))
 
 
-class Investing(_Source):
+class Investing(Source):
 
     def __init__(self, topics=[], save_feeds=True):
         """
@@ -39,7 +39,7 @@ class Investing(_Source):
         self.add_topics(list(set(topics)))
 
 
-class WSJ(_Source):
+class WSJ(Source):
 
     def __init__(self, topics=[], save_feeds=True):
         """
@@ -52,7 +52,7 @@ class WSJ(_Source):
         self.add_topics(list(set(topics)))
 
 
-class Yahoo(_Source):
+class Yahoo(Source):
 
     def __init__(self, topics=[], save_feeds=True):
         """
@@ -65,7 +65,7 @@ class Yahoo(_Source):
         self.add_topics(list(set(topics)))
 
 
-class FT(_Source):
+class FT(Source):
 
     def __init__(self, topics=[], save_feeds=True):
         """
@@ -78,7 +78,7 @@ class FT(_Source):
         self.add_topics(list(set(topics)))
 
 
-class Fortune(_Source):
+class Fortune(Source):
 
     def __init__(self, topics=[], save_feeds=True):
         """
@@ -91,7 +91,7 @@ class Fortune(_Source):
         self.add_topics(list(set(topics)))
 
 
-class MarketWatch(_Source):
+class MarketWatch(Source):
 
     def __init__(self, topics=[], save_feeds=True):
         """
