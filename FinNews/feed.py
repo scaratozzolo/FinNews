@@ -171,7 +171,6 @@ class Feed(object):
             try:
                 df = df.drop([col], axis=1)
             except:
-                print(col + " fail")
                 pass
 
         df.to_sql(name=table_name, con=conn, if_exists=if_exists, index=False)
