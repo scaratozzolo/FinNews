@@ -116,7 +116,10 @@ class Source(object):
             # TODO check if len is greater than 1, other items in list are tickers
             if topic == '*':
                 new_topics = self.__possible_topics
-                new_topics.remove('ticker')
+                try:
+                    new_topics.remove('ticker')
+                except:
+                    pass
                 break
 
             if topic[0] != '$':
