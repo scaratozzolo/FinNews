@@ -10,8 +10,8 @@ class Source(object):
 
     def __init__(self, source, save_feeds=True):
         """
-        Base class for cources like CNBC, SeekingAlpha.
-        save_feeds: Feed objects can save all previous news entries if this is True, otherwise the object will only the newest entries
+        Base class for cources like CNBC, SeekingAlpha...
+        save_feeds: Feed objects can save all previous news entries if this is True, otherwise the object will save only the newest entries
         """
         self.__source = source
         self.__possible_topics = []
@@ -113,9 +113,10 @@ class Source(object):
 
         new_topics = []
         for topic in topics:
-            # TODO check if source allows for ticker feeds
+            # TODO check if len is greater than 1, other items in list are tickers
             if topic == '*':
                 new_topics = self.__possible_topics
+                new_topics.remove('ticker')
                 break
 
             if topic[0] != '$':
