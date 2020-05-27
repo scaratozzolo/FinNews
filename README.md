@@ -16,45 +16,30 @@ Example usage:
 ```python
 import FinNews as fn
 
-cnbc_feed = fn.CNBC(topics=['*']) # '*' = all possible topics
+cnbc_feed = fn.CNBC(topics=['finance', 'earnings'])
 print(cnbc_feed.get_news())
 print(cnbc_feed.possible_topics())
+
+# Some feeds have support for feeds by ticker, tickers can be passed as a topic and are denoted by $XXX. These feeds will have 'ticker' as a possible topic.
+fn.SeekingAlpha(topics=['financial', '$AAPL'], save_feeds=True)
+
+# You can also pass in '*' to select all possible topic feeds.
+fn.WSJ(topics=['*'], save_feeds=True)
+
+# Selecting all topics will not add specific ticker feeds. You will have to add tickers manually.
+fn.Yahoo(topics=['*']).add_topics(['$DIS', '$GOOG'])
 ```
 
-Current RSS feeds and their classes:
+Current RSS feeds:
 - CNBC
-```python
-fn.CNBC(topics=['finance', 'earnings'], save_feeds=True)
-```
-- Seeking Alpha
-```python
-# SeekingAlpha has support for RSS feeds by ticker, tickers can be passed as a topic and are denoted by $XXX
-fn.SeekingAlpha(topics=['financial', '$AAPL'], save_feeds=True)
-```
+- Seeking Alpha*
 - Investing.com
-```python
-fn.Investing(topics=['all news', 'latest news'], save_feeds=True)
-```
 - WSJ
-```python
-fn.WSJ(topics=['markets news', 'us business'], save_feeds=True)
-```
-- Yahoo Finance
-```python
-# Yahoo Finance has support for RSS feeds by ticker, tickers can be passed as a topic and are denoted by $XXX
-fn.Yahoo(topics=['top stories', '$DIS'], save_feeds=True)
-```
+- Yahoo Finance*
 - Financial Times
-```python
-# not a lot of feeds
-fn.FT(topics=['*'], save_feeds=True)
-```
 - Fortune
-```python
-# not a lot of feeds
-fn.Fortune(topics=['*'], save_feeds=True)
-```
 - MarketWatch
-```python
-fn.MarketWatch(topics=['*'], save_feeds=True)
-```
+- Zacks
+- Nasdaq*
+
+(* denotes ticker feed support)
