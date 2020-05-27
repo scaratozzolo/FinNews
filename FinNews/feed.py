@@ -37,8 +37,21 @@ class Feed(object):
         except:
             self.__updated = None
 
+
         for i in self.__newest_entries:
+            # Add topic to each entry
             i['topic'] = self.get_feed_topic()
+
+            # get tag terms and add to list, convert list to string
+            try:
+                tags = []
+                for tag in i['tags']:
+                    tags.append(tag['term'])
+                i['tag_terms'] = ','.join(tags)
+            except:
+                pass
+
+
 
         if self.__save_feeds:
             self.__all_entries.extend(self.__feed['entries'])
@@ -174,7 +187,7 @@ class Feed(object):
         df = self.to_pandas(all_entries, remove_duplicates, update_before)
 
         # turn possible columns into an outer join funtion to get the list
-        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'updated_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'nasdaq_partnerlink']
+        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'updated_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'nasdaq_partnerlink', 'media_thumbnail']
         for col in possible_columns:
             try:
                 df = df.drop([col], axis=1)

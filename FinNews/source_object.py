@@ -113,7 +113,7 @@ class Source(object):
             Returns new topics added"""
         conn = sqlite3.connect(pkg_resources.resource_filename("FinNews", "rss.db"))
         c = conn.cursor()
-
+        # TODO check if source allows tickers
         new_topics = []
         for topic in topics:
             # TODO check if len is greater than 1, other items in list are tickers
@@ -197,13 +197,14 @@ class Source(object):
 
         # turn possible columns into an outer join funtion to get the list
         # outer join from feeds
-        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'updated_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'nasdaq_partnerlink']
+        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'updated_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'nasdaq_partnerlink', 'media_thumbnail']
         for col in possible_columns:
             try:
                 df = df.drop([col], axis=1)
             except:
                 pass
 
+        # print(df.columns)
         df.to_sql(name=table_name, con=conn, if_exists=if_exists, index=False)
 
         if remove_duplicates:
