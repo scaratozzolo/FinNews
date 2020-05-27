@@ -1,5 +1,7 @@
 # FinNews
 
+[![PyPI version](https://badge.fury.io/py/FinNews.svg)](https://badge.fury.io/py/FinNews)
+
 This is a package to help me with a personal project dealing with sentiment analysis and headline classification. The package has a lot of influence from the [newscatcher package](https://github.com/kotartemiy/newscatcher). While that package is great for getting general news, I need more financial related news that I wasn't getting.
 
 

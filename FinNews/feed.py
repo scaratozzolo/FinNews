@@ -161,7 +161,7 @@ class Feed(object):
             df['timestamp'] = df['published_parsed'].apply(self.time_to_timestamp)
         else:
             df['timestamp'] = df['updated_parsed'].apply(self.time_to_timestamp)
-            
+
         df['topic'] = self.__feed_topic
 
         return df
@@ -174,7 +174,7 @@ class Feed(object):
         df = self.to_pandas(all_entries, remove_duplicates, update_before)
 
         # turn possible columns into an outer join funtion to get the list
-        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'nasdaq_partnerlink']
+        possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'updated_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'nasdaq_partnerlink']
         for col in possible_columns:
             try:
                 df = df.drop([col], axis=1)
