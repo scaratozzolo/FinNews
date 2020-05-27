@@ -102,3 +102,29 @@ class MarketWatch(Source):
         """
         super().__init__('MarketWatch', save_feeds)
         self.add_topics(list(set(topics)))
+
+
+class Zacks(Source):
+
+    def __init__(self, topics=[], save_feeds=True):
+        """
+        Object for maintaining Zacks rss feeds.
+        topics: a list of rss feed topics, must be one of the possible topics
+            You can leave the list blank and call CNBC.get_possible_topics() and then add topics using CNBC.add_topics()
+        save_feeds: Feed objects can save all previous news entries if this is True, otherwise the object will only the newest entries
+        """
+        super().__init__('Zacks', save_feeds)
+        self.add_topics(list(set(topics)))
+
+
+class Nasdaq(Source):
+
+    def __init__(self, topics=[], save_feeds=True):
+        """
+        Object for maintaining Nasdaq rss feeds.
+        topics: a list of rss feed topics, must be one of the possible topics
+            You can leave the list blank and call CNBC.get_possible_topics() and then add topics using CNBC.add_topics()
+        save_feeds: Feed objects can save all previous news entries if this is True, otherwise the object will only the newest entries
+        """
+        super().__init__('Nasdaq', save_feeds)
+        self.add_topics(list(set(topics)))
