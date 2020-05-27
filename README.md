@@ -54,12 +54,7 @@ fn.FT(topics=['*'], save_feeds=True)
 # not a lot of feeds
 fn.Fortune(topics=['*'], save_feeds=True)
 ```
-
-Todo:
-- [x] CNBC
-- [x] Seeking Alpha
-- [x] Investing.com
-- [x] WSJ
-- [x] Yahoo Finance
-- [x] Financial Times
-- [x] Fortune
+- MarketWatch
+```python
+fn.MarketWatch(topics=['*'], save_feeds=True)
+```

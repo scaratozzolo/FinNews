@@ -3,6 +3,6 @@ from FinNews.sources import *
 
 name = "FinNews"
 
-__version__ = "0.9.2"
+__version__ = "0.10.0"
 
-__all__ = ['Feed', 'CNBC', 'SeekingAlpha', 'Investing', 'WSJ', 'Yahoo', 'FT', 'Fortune']
+__all__ = ['Feed', 'CNBC', 'SeekingAlpha', 'Investing', 'WSJ', 'Yahoo', 'FT', 'Fortune', 'MarketWatch']

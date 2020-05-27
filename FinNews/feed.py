@@ -119,9 +119,12 @@ class Feed(object):
         except:
             return None
 
-    def to_pandas(self, all_entries=True, remove_duplicates=True):
+    def to_pandas(self, all_entries=True, remove_duplicates=True, update_before=True):
         """Returns a pandas dataframe of the most recent news entries or all saved entries"""
-        # TODO update before converting?
+
+        if update_before:
+            self.get_news()
+
         if self.__all_entries == []:
             return pd.DataFrame()
 
@@ -138,12 +141,12 @@ class Feed(object):
 
         return df
 
-    def to_sqlite3(self, db_path, table_name, all_entries=True, if_exists="append", remove_duplicates=True):
+    def to_sqlite3(self, db_path, table_name, all_entries=True, if_exists="append", remove_duplicates=True, update_before=True):
         """Converts entries into an sqlite3 table using pandas.DataFrame.to_sql function"""
 
         conn = sqlite3.connect(db_path)
 
-        df = self.to_pandas(all_entries, remove_duplicates)
+        df = self.to_pandas(all_entries, remove_duplicates, update_before)
 
         possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'credit']
         for col in possible_columns:
@@ -165,10 +168,10 @@ class Feed(object):
 
         return True
 
-    def to_json(self, file_path, all_entries=True, remove_duplicates=True, orient='index'):
+    def to_json(self, file_path, all_entries=True, remove_duplicates=True, orient='index', update_before=True):
         """Converts entries to a json file using pandas to_json function"""
         # TODO update before converting?
-        df = self.to_pandas(all_entries, remove_duplicates)
+        df = self.to_pandas(all_entries, remove_duplicates, update_before)
         df.to_json(file_path, orient=orient)
 
         return True

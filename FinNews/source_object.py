@@ -16,6 +16,7 @@ class _Source(object):
         self.__source = source
         self.__possible_topics = []
         self.__save_feeds = save_feeds
+        # Get saved feeds
         self.__current_feeds = []
         self.__current_topics = []
 
