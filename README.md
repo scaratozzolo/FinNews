@@ -49,6 +49,9 @@ FinNews.MarketWatch() # MarketWatch
 FinNews.Zacks() # Zacks
 FinNews.Nasdaq() # Nasdaq*
 FinNews.Reddit() # Reddit
+FinNews.CNNMoney() # CNN Money
+FinNews.Reuters() # Reuters
+
 
 # (* denotes ticker feed support)
 ```
