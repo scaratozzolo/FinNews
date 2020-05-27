@@ -179,7 +179,7 @@ class Feed(object):
 
         return df
 
-    def to_sqlite3(self, db_path, table_name, all_entries=True, if_exists="append", remove_duplicates=True, update_before=True):
+    def to_sqlite3(self, db_path, table_name, all_entries=True, if_exists="append", remove_duplicates=True, update_before=True, convert_to_string=True):
         """Converts entries into an sqlite3 table using pandas.DataFrame.to_sql function"""
 
         conn = sqlite3.connect(db_path)
@@ -190,7 +190,10 @@ class Feed(object):
         possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'updated_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'nasdaq_partnerlink', 'media_thumbnail']
         for col in possible_columns:
             try:
-                df = df.drop([col], axis=1)
+                if convert_to_string:
+                    df[col] = df[col].apply(str)
+                else:
+                    df = df.drop([col], axis=1)
             except:
                 pass
 

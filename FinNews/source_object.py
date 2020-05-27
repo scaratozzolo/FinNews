@@ -190,7 +190,7 @@ class Source(object):
 
         return df
 
-    def to_sqlite3(self, db_path, table_name, if_exists="append", remove_duplicates=True):
+    def to_sqlite3(self, db_path, table_name, if_exists="append", remove_duplicates=True, convert_to_string=True):
         """Converts the most recent entries into an sqlite3 table using pandas.DataFrame.to_sql function"""
         conn = sqlite3.connect(db_path)
         df = self.to_pandas(remove_duplicates)
@@ -200,11 +200,13 @@ class Source(object):
         possible_columns = ['links','title_detail','summary_detail', 'source', 'media_content', 'media_text', 'media_credit', 'published_parsed', 'updated_parsed', 'tags', 'authors', 'author_detail', 'post-id', 'content', 'nasdaq_partnerlink', 'media_thumbnail']
         for col in possible_columns:
             try:
-                df = df.drop([col], axis=1)
+                if convert_to_string:
+                    df[col] = df[col].apply(str)
+                else:
+                    df = df.drop([col], axis=1)
             except:
                 pass
 
-        # print(df.columns)
         df.to_sql(name=table_name, con=conn, if_exists=if_exists, index=False)
 
         if remove_duplicates:
